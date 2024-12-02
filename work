@@ -1,0 +1,26 @@
+import os
+import time
+from threading import Thread
+
+def create_file(filename):
+    time.sleep(1)  
+    with open(filename, 'w') as file:
+        file.write(f"This is file {filename}.\n")
+
+def multithread():
+    start_time = time.time()
+    threads = []
+    for i in range(100):
+        thread = Thread(target=create_file, args=(f"file_{i}.txt",))
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+    elapsed_time = time.time() - start_time
+    return elapsed_time
+
+
+
+multithreaded_time = multithread()
+
+multithreaded_time

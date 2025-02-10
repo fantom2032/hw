@@ -1,29 +1,15 @@
-from flask import Flask, request, render_template
-import sqlite3
+import requests
+from bs4 import BeautifulSoup
 
-app = Flask(__name__)
+link = "https://www.mechta.kz/section/smartfony/"
 
-def get_db_connection():
-    connection = sqlite3.connect('users.db')
-    connection.row_factory = sqlite3.Row
-    return connection
+response = requests.get(link).text
+soup = BeautifulSoup(response, 'lxml')
 
-@app.route('/', methods=['GET', 'POST'])
-def reg():
-    message = None
-    if request.method == 'POST':
-        login = request.form['login']
-        password = request.form['password']
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO users (login, password) VALUES (?, ?)', (login, password))
-        conn.commit()
-        conn.close()
-        
-        message = "Регистрация успешно завершена"
-    
-    return render_template('index.html', message=message)
+items = soup.find('div', class_='tw-grid tw-grid-cols-3 tw-gap-6 tw-mt-5')
+title = items.find_all('div', class_='tw-mt-[15px] tw-font-normal tw-text-sm tw-text-color1 dark:tw-text-dColor1 tw-overflow-hidden tw-text-ellipsis tw-whitespace-nowrap')
+price = items.find_all('div', class_='tw-text-xl tw-font-bold tw-text-color1 dark:tw-text-dColor1')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+for i in range(len(title)):
+    with open('text.txt', 'w', encoding='utf-8') as file:
+        file.write(f'{title[i].text} - {price[i].text}\n')

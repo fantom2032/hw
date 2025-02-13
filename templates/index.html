@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        <div id="conteiner">
+
+                {% for i in range(title_div | length) %}
+                    <div id="box">
+                            <h1>{{ title_div[i].text  }}</h1>
+                            <hr> 
+                            <h1>{{ price_div[i].text  }}</h1>
+                    </div>
+                {% endfor %}
+
+            
+            {% if average_price %}
+                <h2>Средняя цена: {{ average_price|round(2) }} тенге</h2>
+            {% endif %}
+            
+            
+            
+        </div>
+        <button type="submit">fghdfg</button>
+    </form>
+</body>
+</html>
